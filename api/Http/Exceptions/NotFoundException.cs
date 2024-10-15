@@ -5,14 +5,14 @@ namespace api.Http.Exceptions
     public class NotFoundException : BaseException
     {
 
-        public NotFoundException(string message) :
+        public NotFoundException(string message, string path) :
         base
             (
                 "0-002",
                 message,
                 HttpStatusCode.NoContent,
                 StatusCodes.Status404NotFound,
-                null,
+                path,
                 DateTimeOffset.UtcNow,
                 null
             )

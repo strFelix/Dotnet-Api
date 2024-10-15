@@ -28,7 +28,7 @@ namespace api.Services.UserServices
             User? user = await _userRepository.SelectUserByIdAsync(id);
             if (user == null)
             {
-                throw new NotFoundException("User not found.");
+                throw new NotFoundException("User not found.", "GET: api/User/");
             }
             UserDto userDto = _mapper.Map<UserDto>(user);
             return userDto;
@@ -40,7 +40,7 @@ namespace api.Services.UserServices
             User? userExists = await _userRepository.SelectUserByEmailAsync(user.Email);
             if (userExists != null && !userExists.Equals(user))
             {
-                throw new ConflictException("User already exists");
+                throw new ConflictException("User already exists", "POST: api/User/");
             }
             await _userRepository.InsertUserAsync(user);
         }
@@ -50,7 +50,7 @@ namespace api.Services.UserServices
             User? userExists = await _userRepository.SelectUserByIdAsync(id);
             if(userExists is null)
             {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException("User not found", "PUT: api/User/");
             }
             
             userExists.Name = userDto.Name;
@@ -65,7 +65,7 @@ namespace api.Services.UserServices
             User? userExists = await _userRepository.SelectUserByIdAsync(id);
             if (userExists is null)
             {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException("User not found", "DELETE: api/User/");
             }
 
             await _userRepository.DeleteUserAsync(userExists);

@@ -13,7 +13,7 @@ namespace api.Http.Exceptions
         public BaseException(string errorCode, string message, HttpStatusCode httpStatusCode, int statusCode, string uriPath, DateTimeOffset timestamp, Exception? ex) : base(message, ex)
         {
             StatusCode = httpStatusCode;
-            HttpResponse = new HttpErrorResponse(errorCode, message, statusCode, uriPath, timestamp);
+            HttpResponse = new HttpErrorResponse(errorCode, message, statusCode, uriPath , timestamp);
         }
 
         public IActionResult GetResponse()
