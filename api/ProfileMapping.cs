@@ -10,6 +10,7 @@ namespace api
         public ProfileMapping()
         {
             CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }
