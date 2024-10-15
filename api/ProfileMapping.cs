@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using api.Models;
+using api.Dtos;
+
 
 namespace api
 {
@@ -7,7 +9,7 @@ namespace api
     {
         public ProfileMapping()
         {
-
+            CreateMap<UserDto, User>();
         }
     }
 }
