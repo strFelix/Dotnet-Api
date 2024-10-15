@@ -10,7 +10,7 @@ namespace api.Http.Exceptions
             (
                 "0-002",
                 message,
-                HttpStatusCode.NoContent,
+                HttpStatusCode.NotFound,
                 StatusCodes.Status404NotFound,
                 path,
                 DateTimeOffset.UtcNow,
