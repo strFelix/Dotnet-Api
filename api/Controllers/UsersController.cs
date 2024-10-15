@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using api.Data;
 using api.Models;
+using api.Http.Exceptions;
 
 namespace api.Controllers;
 
@@ -17,6 +18,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllUsersAsync()
     {
         try
@@ -24,13 +27,16 @@ public class UsersController : ControllerBase
             List<User> users = await _context.Users.ToListAsync();
             return Ok(users);
         }
-        catch (Exception ex)
+        catch (BaseException ex)
         {
-            return BadRequest(ex.Message);
+            return ex.GetResponse();
         }
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetUserByIdAsync(int id)
     {
         try
@@ -40,14 +46,17 @@ public class UsersController : ControllerBase
                 return NotFound();
             return Ok(users);
         }
-        catch (Exception ex)
+        catch (BaseException ex)
         {
-            return BadRequest(ex.Message);
+            return ex.GetResponse();
         }
     }
 
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PostUserAsync(User user)
     {
         try
@@ -56,13 +65,16 @@ public class UsersController : ControllerBase
             await _context.SaveChangesAsync();
             return Created();
         }
-        catch (Exception ex)
+        catch (BaseException ex)
         {
-            return BadRequest(ex.Message);
+            return ex.GetResponse();
         }
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PutUserAsync(User user, int id)
     {
         try
@@ -80,9 +92,9 @@ public class UsersController : ControllerBase
 
             return NoContent();
         }
-        catch (Exception ex)
+        catch (BaseException ex)
         {
-            return BadRequest(ex.Message);
+            return ex.GetResponse();
         }
     }
 }
