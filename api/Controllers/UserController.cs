@@ -3,18 +3,20 @@ using Microsoft.EntityFrameworkCore;
 using api.Data;
 using api.Models;
 using api.Http.Exceptions;
+using api.Dtos;
+using api.Services.UserServices;
 
 namespace api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UsersController : ControllerBase
+public class UserController : ControllerBase
 {
-    private readonly DataContext _context;
+    private readonly IUserService _userService;
 
-    public UsersController(DataContext context)
+    public UserController(IUserService userService)
     {
-        _context = context;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -24,7 +26,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            List<User> users = await _context.Users.ToListAsync();
+            List<UserDto> users = await _userService.GetAllAsync();
             return Ok(users);
         }
         catch (BaseException ex)
@@ -41,10 +43,8 @@ public class UsersController : ControllerBase
     {
         try
         {
-            User users = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (users == null)
-                return NotFound();
-            return Ok(users);
+            UserDto user = await _userService.GetUserByIdAsync(id);
+            return Ok(user);
         }
         catch (BaseException ex)
         {
@@ -57,13 +57,12 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostUserAsync(User user)
+    public async Task<IActionResult> PostUserAsync(UserDto userDto)
     {
         try
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return Created();
+            await _userService.PostUserAsync(userDto);
+            return Created(nameof(UserController), userDto);
         }
         catch (BaseException ex)
         {
@@ -75,21 +74,11 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PutUserAsync(User user, int id)
+    public async Task<IActionResult> PutUserAsync(UserDto userDto, int id)
     {
         try
         {
-            User userExists = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (userExists == null)
-                return NotFound();
-
-            userExists.Name = user.Name;
-            userExists.Email = user.Email;
-            userExists.PhoneNumber = user.PhoneNumber;
-
-            _context.Users.Update(userExists);
-            await _context.SaveChangesAsync();
-
+            await _userService.PutUserAsync(id, userDto);
             return NoContent();
         }
         catch (BaseException ex)
@@ -97,5 +86,23 @@ public class UsersController : ControllerBase
             return ex.GetResponse();
         }
     }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteUserAsync(int id)
+    {
+        try
+        {
+            await _userService.DeleteUserAsync(id);
+            return NoContent();
+        }
+        catch (BaseException ex)
+        {
+            return ex.GetResponse();
+        }
+    }
+
 }
 
