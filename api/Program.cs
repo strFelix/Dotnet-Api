@@ -1,4 +1,6 @@
 using api.Data;
+using api.Repositorys.User;
+using api.Services.User;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 // Add services to the container.
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 builder.Services.AddAutoMapper(typeof(Program));
