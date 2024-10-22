@@ -16,20 +16,6 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllUsersAsync()
-    {
-        try
-        {
-            List<User> users = await _context.Users.ToListAsync();
-            return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserByIdAsync(int id)
     {
@@ -55,30 +41,6 @@ public class UsersController : ControllerBase
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return Created();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutUserAsync(User user, int id)
-    {
-        try
-        {
-            User userExists = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (userExists == null)
-                return NotFound();
-
-            userExists.Name = user.Name;
-            userExists.Email = user.Email;
-            userExists.PhoneNumber = user.PhoneNumber;
-
-            _context.Users.Update(userExists);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
         catch (Exception ex)
         {
