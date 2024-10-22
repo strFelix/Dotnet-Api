@@ -11,8 +11,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241022124428_addAnswerRelations")]
-    partial class addAnswerRelations
+    [Migration("20241022160333_fixDatabaseRelationships")]
+    partial class fixDatabaseRelationships
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,30 +44,87 @@ namespace api.Migrations
                     b.HasIndex("Title");
 
                     b.ToTable("answers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CorrectOption = 3,
+                            Title = "What is a correct syntax to output 'Hello World' in C#?"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CorrectOption = 4,
+                            Title = "Which data type is used to create a variable that should store text?"
+                        });
                 });
 
             modelBuilder.Entity("api.Models.Option", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("AnswerId")
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnswerId")
+                    b.Property<int>("OptionNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("Description");
+                    b.HasKey("AnswerId", "OptionNumber");
 
                     b.ToTable("options", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            AnswerId = 1,
+                            OptionNumber = 1,
+                            Description = "print('Hello World')"
+                        },
+                        new
+                        {
+                            AnswerId = 1,
+                            OptionNumber = 2,
+                            Description = "cout < < 'Hello World'"
+                        },
+                        new
+                        {
+                            AnswerId = 1,
+                            OptionNumber = 3,
+                            Description = "System.out.printLn('Hello World')"
+                        },
+                        new
+                        {
+                            AnswerId = 1,
+                            OptionNumber = 4,
+                            Description = "Console.WriteLine('Hello World')"
+                        },
+                        new
+                        {
+                            AnswerId = 2,
+                            OptionNumber = 1,
+                            Description = "myString"
+                        },
+                        new
+                        {
+                            AnswerId = 2,
+                            OptionNumber = 2,
+                            Description = "Txt"
+                        },
+                        new
+                        {
+                            AnswerId = 2,
+                            OptionNumber = 3,
+                            Description = "str"
+                        },
+                        new
+                        {
+                            AnswerId = 2,
+                            OptionNumber = 4,
+                            Description = "string"
+                        });
                 });
 
             modelBuilder.Entity("api.Models.User", b =>
@@ -116,7 +173,7 @@ namespace api.Migrations
 
                     b.HasIndex("AnswerId");
 
-                    b.ToTable("reponses", (string)null);
+                    b.ToTable("responses", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Option", b =>
