@@ -6,7 +6,7 @@ using api.Models;
 namespace api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
     private readonly DataContext _context;
@@ -21,7 +21,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            User users = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            User? users = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (users == null)
                 return NotFound();
             return Ok(users);
