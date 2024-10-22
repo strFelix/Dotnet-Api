@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace api.Models
 {
@@ -8,7 +9,7 @@ namespace api.Models
         public int OptionNumber { get; set; }
         public string Description { get; set; } = string.Empty;
 
-        [NotMapped]
-        public Answer Answer { get; set; }
+        [NotMapped, JsonIgnore]
+        public Answer Answer { get; set; } = null!;
     }
 }
