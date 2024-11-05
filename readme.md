@@ -1,4 +1,4 @@
-# Configuração do Projeto Base Dotnet API
+# Configuração do Projeto
 
 Este documento descreve o processo de configuração do projeto Base Dotnet API, permitindo que você inicie sua API.
 
