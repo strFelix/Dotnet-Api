@@ -76,7 +76,7 @@ No arquivo `appsettings.json`, adicione a string de conexão para o seu banco de
 }
 ```
 
-### 5. Configuração do Startup
+### 5. Configuração do `Program.cs`
 
 No arquivo Startup.cs, configure o seu DbContext para usar a string de conexão:
 
