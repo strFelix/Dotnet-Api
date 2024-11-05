@@ -32,7 +32,9 @@ cd Base-Dotnet-Api
 Para instalar o Entity Framework Core, execute os seguintes comandos:
 
 ```bash
+dotnet tool install --global dotnet-ef
 dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
 
 Se você estiver usando um banco de dados específico, adicione o provedor correspondente. Por exemplo, para SQL Server:
